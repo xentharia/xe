@@ -13,14 +13,22 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary: #1a2a6c;
+            --secondary: #b21f1f;
+            --accent: #ffd700;
+            --dark: #0d1530;
+            --light: #f8f9fa;
+        }
+        
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 0 0 70px;
             overflow-x: hidden;
         }
         
@@ -29,7 +37,7 @@
             width: 100%;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 20px;
-            padding: 30px;
+            padding: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
             margin-top: 20px;
@@ -37,51 +45,82 @@
             overflow: hidden;
         }
         
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            z-index: -1;
-        }
-        
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #ffd700;
+            font-size: 2.2rem;
+            margin: 15px 0;
+            color: var(--accent);
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
             letter-spacing: 1px;
         }
         
         h2 {
-            font-size: 1.8rem;
-            margin: 15px 0;
+            font-size: 1.6rem;
+            margin: 10px 0;
             color: #4dabf7;
         }
         
         h3 {
             font-size: 1.4rem;
             margin: 10px 0;
-            color: #ffd700;
+            color: var(--accent);
         }
         
-        .screen {
+        .page {
             display: none;
             animation: fadeIn 0.5s ease-in-out;
         }
         
-        #home-screen {
+        .active-page {
+            display: block;
+        }
+        
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(13, 21, 48, 0.9);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px 5px;
+            color: #aaa;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item.active {
+            color: var(--accent);
+            background: rgba(26, 42, 108, 0.5);
+        }
+        
+        .nav-item i {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        
+        /* Home Page */
+        #home-page {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 70vh;
+            padding: 20px;
         }
         
-        .balance-container {
+        .welcome-box {
             background: linear-gradient(to right, #192a56, #273c75);
             border-radius: 15px;
             padding: 20px;
@@ -89,29 +128,31 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
+            width: 100%;
         }
         
-        .balance-container::before {
+        .welcome-box::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 5px;
-            background: linear-gradient(to right, #ffd700, #ff9800);
+            background: linear-gradient(to right, var(--accent), #ff9800);
         }
         
-        #balance {
-            font-size: 2.8rem;
-            font-weight: bold;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        
-        .currency {
-            font-size: 1.2rem;
-            color: #4dabf7;
-            margin-left: 5px;
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: var(--accent);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .btn {
@@ -148,27 +189,74 @@
             transform: none;
         }
         
-        .btn::after {
+        .referral-section {
+            background: rgba(30, 40, 60, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .referral-link-container {
+            display: flex;
+            margin: 15px 0;
+        }
+        
+        #referral-link {
+            flex: 1;
+            background: rgba(50, 50, 70, 0.7);
+            border: none;
+            border-radius: 30px 0 0 30px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        #copy-referral-btn {
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            padding: 0 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        /* Earn Page */
+        .balance-container {
+            background: linear-gradient(to right, #192a56, #273c75);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .balance-container::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(30deg);
-            transition: all 0.6s;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--accent), #ff9800);
         }
         
-        .btn:hover::after {
-            transform: rotate(30deg) translate(20%, 20%);
+        #balance {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
-        #start-btn {
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            font-size: 1.8rem;
-            padding: 20px 40px;
-            margin-top: 30px;
+        .currency {
+            font-size: 1.2rem;
+            color: #4dabf7;
+            margin-left: 5px;
         }
         
         .ad-container {
@@ -206,7 +294,7 @@
         
         .ad-title {
             font-size: 1.5rem;
-            color: #ffd700;
+            color: var(--accent);
             margin-bottom: 15px;
         }
         
@@ -230,18 +318,6 @@
             color: white;
             position: relative;
             overflow: hidden;
-        }
-        
-        .ad-image::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: rotate(30deg);
-            animation: shine 3s infinite;
         }
         
         .progress-container {
@@ -278,7 +354,7 @@
         .stat-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #ffd700;
+            color: var(--accent);
         }
         
         .stat-label {
@@ -318,26 +394,13 @@
             font-weight: bold;
         }
         
-        .ad-info {
-            background: rgba(40, 40, 60, 0.7);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            font-size: 0.9rem;
-        }
-        
-        .ad-info i {
-            color: #ffd700;
-            margin-right: 5px;
-        }
-        
+        /* Withdrawal Page */
         .withdrawal-section {
             background: linear-gradient(135deg, #0f4c75, #3282b8);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
             text-align: center;
-            display: none;
         }
         
         .withdrawal-header {
@@ -374,7 +437,7 @@
         label {
             margin-bottom: 8px;
             font-weight: bold;
-            color: #ffd700;
+            color: var(--accent);
         }
         
         select, input {
@@ -406,7 +469,7 @@
         }
         
         .withdrawal-info-item i {
-            color: #ffd700;
+            color: var(--accent);
             margin-right: 10px;
             min-width: 20px;
         }
@@ -503,55 +566,31 @@
             margin-bottom: 15px;
         }
         
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #aaa;
-            font-size: 0.9rem;
-            padding: 10px;
-        }
-        
-        .modal {
-            display: none;
+        /* Notification */
+        .notification {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 90%;
-            width: 400px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(46, 204, 113, 0.9);
             color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.5s ease-out;
         }
         
+        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        @keyframes shine {
-            0% { transform: rotate(30deg) translate(-100%, -100%); }
-            100% { transform: rotate(30deg) translate(100%, 100%); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translate(-50%, -50px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
         }
         
         @keyframes pulse {
@@ -560,31 +599,22 @@
             100% { transform: scale(1); }
         }
         
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        
         .pulse {
             animation: pulse 0.5s ease-in-out;
         }
         
-        .float {
-            animation: float 3s ease-in-out infinite;
-        }
-        
+        /* Responsive */
         @media (max-width: 500px) {
             .container {
-                padding: 20px 15px;
+                padding: 15px 10px;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
             }
             
             #balance {
@@ -596,37 +626,100 @@
                 font-size: 1.1rem;
             }
             
-            #start-btn {
-                font-size: 1.5rem;
-                padding: 18px 30px;
+            .referral-link-container {
+                flex-direction: column;
             }
             
-            .ad-image {
-                height: 120px;
+            #referral-link {
+                border-radius: 30px 30px 0 0;
+            }
+            
+            #copy-referral-btn {
+                border-radius: 0 0 30px 30px;
+                padding: 10px;
+            }
+            
+            .nav-item {
+                padding: 12px 5px;
+                font-size: 0.8rem;
+            }
+            
+            .nav-item i {
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Notification sent to admin!
+    </div>
+
     <div class="container">
         <h1>Ad Money Game</h1>
         
-        <!-- Home Screen -->
-        <div id="home-screen" class="screen">
-            <h2>Watch Ads & Earn Money!</h2>
-            <p>Earn $0.01 for each ad you watch</p>
-            <button id="start-btn" class="btn">START GAME</button>
-            <div style="margin-top: 30px; opacity: 0.8;">
-                <i class="fas fa-mobile-alt float" style="font-size: 3rem;"></i>
-                <p style="margin-top: 15px;">Mobile friendly design</p>
+        <!-- Home Page -->
+        <div id="home-page" class="page active-page">
+            <div class="welcome-box">
+                <div class="app-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <h2>Watch Ads & Earn Money!</h2>
+                <p>Earn $0.01 for each ad you watch</p>
+                <p>Withdraw your earnings after reaching $11</p>
+                <button class="btn" id="start-earning-btn">
+                    <i class="fas fa-play-circle"></i> START EARNING
+                </button>
             </div>
-            <div class="ad-info">
-                <p><i class="fas fa-info-circle"></i> Withdraw your earnings after reaching $11</p>
+            
+            <div class="referral-section">
+                <h3><i class="fas fa-user-friends"></i> Referral Program</h3>
+                <p>Invite friends and earn <span style="color: var(--accent); font-weight: bold;">20%</span> of their earnings!</p>
+                
+                <div class="referral-link-container">
+                    <input type="text" id="referral-link" readonly>
+                    <button id="copy-referral-btn">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                
+                <button id="share-referral-btn" class="btn" style="background: linear-gradient(to right, #9b59b6, #3498db);">
+                    <i class="fas fa-share-alt"></i> SHARE REFERRAL LINK
+                </button>
+                
+                <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent);" id="referrals-count">0</div>
+                        <div style="font-size: 0.9rem; color: #aaa;">Friends Referred</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent);" id="referral-earnings">0.00</div>
+                        <div style="font-size: 0.9rem; color: #aaa;">Referral Earnings</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; background: rgba(40,40,60,0.7); padding: 15px; border-radius: 15px;">
+                <h3>How It Works</h3>
+                <div style="text-align: left; margin-top: 15px;">
+                    <div style="display: flex; margin-bottom: 10px;">
+                        <div style="background: var(--accent); color: #000; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">1</div>
+                        <div>Watch ads to earn money ($0.01 per ad)</div>
+                    </div>
+                    <div style="display: flex; margin-bottom: 10px;">
+                        <div style="background: var(--accent); color: #000; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">2</div>
+                        <div>Invite friends with your referral link</div>
+                    </div>
+                    <div style="display: flex;">
+                        <div style="background: var(--accent); color: #000; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">3</div>
+                        <div>Withdraw $10 when you reach $11 balance</div>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <!-- Game Screen -->
-        <div id="game-screen" class="screen">
+        <!-- Earn Page -->
+        <div id="earn-page" class="page">
             <div class="balance-container">
                 <h2>Your Balance</h2>
                 <div>
@@ -646,8 +739,46 @@
                 </div>
             </div>
             
-            <!-- Withdrawal Section -->
-            <div id="withdrawal-section" class="withdrawal-section">
+            <div class="ad-container">
+                <div class="ad-content">
+                    <div class="ad-title" id="ad-title">Premium Mobile Game</div>
+                    <div class="ad-image">ADVERTISEMENT</div>
+                    <div class="ad-description" id="ad-description">Download now and get 500 free coins!</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                
+                <button id="watch-ad-btn" class="btn">WATCH AD TO EARN $0.01</button>
+            </div>
+            
+            <div class="history">
+                <h3>Earning History</h3>
+                <div id="history-list">
+                    <div class="history-item">Start watching ads to see your earnings here</div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(40,40,60,0.7); padding: 15px; border-radius: 15px; margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3>Withdrawal Status</h3>
+                        <p>Current balance: <span id="current-balance">0.00</span> USD</p>
+                    </div>
+                    <div id="withdrawal-status" style="background: #ff6b6b; padding: 8px 15px; border-radius: 20px; font-weight: bold;">
+                        $11 required
+                    </div>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> You need $11 to withdraw. $1 fee will be deducted.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Withdrawals Page -->
+        <div id="withdraw-page" class="page">
+            <div class="withdrawal-section">
                 <div class="withdrawal-header">
                     <div class="withdrawal-icon">
                         <i class="fas fa-wallet"></i>
@@ -663,6 +794,10 @@
                     <div class="withdrawal-info-item">
                         <i class="fas fa-clock"></i>
                         <div>Withdrawals processed within 24-48 hours</div>
+                    </div>
+                    <div class="withdrawal-info-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div>Current balance: <span id="withdraw-balance">0.00</span> USD</div>
                     </div>
                 </div>
                 
@@ -718,12 +853,12 @@
                             <input type="text" id="withdrawal-amount" value="10.00" readonly style="flex: 1; margin-right: 10px;">
                             <span style="font-size: 1.2rem;">USD</span>
                         </div>
-                        <small style="margin-top: 5px;">$1 fee deducted from your $11 balance</small>
+                        <small style="margin-top: 5px; color: #ffd700;">$1 fee deducted from your $11 balance</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="wallet-address">Your Wallet Address</label>
-                        <input type="text" id="wallet-address" placeholder="Enter your payment address" required>
+                        <input type="text" id="wallet-address" placeholder="Enter your PayPal email" required>
                     </div>
                     
                     <button id="submit-withdrawal" class="withdrawal-btn">
@@ -741,74 +876,30 @@
                 </div>
             </div>
             
-            <div class="ad-container">
-                <div class="ad-content">
-                    <div class="ad-title" id="ad-title">Premium Mobile Game</div>
-                    <div class="ad-image">ADVERTISEMENT</div>
-                    <div class="ad-description" id="ad-description">Download now and get 500 free coins!</div>
-                </div>
-                
-                <div class="progress-container">
-                    <div class="progress-bar" id="progress-bar"></div>
-                </div>
-                
-                <button id="watch-ad-btn" class="btn">WATCH AD TO EARN $0.01</button>
-            </div>
-            
-            <div class="history">
-                <h3>Earning History</h3>
-                <div id="history-list">
-                    <div class="history-item">Start watching ads to see your earnings here</div>
+            <div style="margin-top: 20px; background: rgba(40,40,60,0.7); padding: 15px; border-radius: 15px;">
+                <h3>Withdrawal History</h3>
+                <div id="withdrawal-history" style="margin-top: 15px; min-height: 100px; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                    <p>No withdrawal history yet</p>
                 </div>
             </div>
-            
-            <div class="ad-info">
-                <p><i class="fas fa-sync-alt"></i> Each ad earns $0.01</p>
-                <p><i class="fas fa-money-bill-wave"></i> Withdrawals available after $11 balance</p>
-            </div>
-            
-            <button id="reset-btn" class="btn" style="background: linear-gradient(to right, #ff6b6b, #ff9e7d); margin-top: 20px;">
-                <i class="fas fa-redo"></i> RESET GAME
-            </button>
         </div>
     </div>
     
-    <!-- Withdrawal Confirmation Modal -->
-    <div id="withdrawal-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h2>Withdrawal Request Submitted!</h2>
-            <div class="withdrawal-info" style="text-align: left; margin: 20px 0;">
-                <div class="withdrawal-info-item">
-                    <i class="fas fa-wallet"></i>
-                    <div><strong>Amount:</strong> $10.00 USD</div>
-                </div>
-                <div class="withdrawal-info-item">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <div><strong>Fee:</strong> $1.00 USD</div>
-                </div>
-                <div class="withdrawal-info-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <div><strong>Payment Method:</strong> <span id="modal-method">PayPal</span></div>
-                </div>
-                <div class="withdrawal-info-item">
-                    <i class="fas fa-address-card"></i>
-                    <div><strong>Wallet Address:</strong> <span id="modal-address">user@example.com</span></div>
-                </div>
-            </div>
-            <p>Your withdrawal request has been received and will be processed within 24-48 hours.</p>
-            <button class="btn" style="background: linear-gradient(to right, #00b09b, #96c93d); margin-top: 20px;">
-                CONTINUE
-            </button>
+    <!-- Navigation Bar -->
+    <div class="nav">
+        <div class="nav-item active" data-page="home-page">
+            <i class="fas fa-home"></i>
+            Home
+        </div>
+        <div class="nav-item" data-page="earn-page">
+            <i class="fas fa-coins"></i>
+            Earn
+        </div>
+        <div class="nav-item" data-page="withdraw-page">
+            <i class="fas fa-wallet"></i>
+            Withdraw
         </div>
     </div>
-    
-    <footer>
-        <p>Ad Money Game &copy; 2023 | Withdrawals after $11 balance | $1 withdrawal fee</p>
-    </footer>
 
     <script>
         // Game state
@@ -817,6 +908,9 @@
             adsWatched: 0,
             totalEarned: 0,
             isWatching: false,
+            referralCode: "XENE7F2B",
+            referralsCount: 3,
+            referralEarnings: 1.20,
             withdrawalMethod: "paypal",
             walletAddress: "",
             adTitles: [
@@ -842,11 +936,12 @@
         };
 
         // DOM elements
-        const homeScreen = document.getElementById('home-screen');
-        const gameScreen = document.getElementById('game-screen');
-        const startBtn = document.getElementById('start-btn');
+        const homePage = document.getElementById('home-page');
+        const earnPage = document.getElementById('earn-page');
+        const withdrawPage = document.getElementById('withdraw-page');
+        const navItems = document.querySelectorAll('.nav-item');
+        const startEarningBtn = document.getElementById('start-earning-btn');
         const watchAdBtn = document.getElementById('watch-ad-btn');
-        const resetBtn = document.getElementById('reset-btn');
         const balanceEl = document.getElementById('balance');
         const adsWatchedEl = document.getElementById('ads-watched');
         const totalEarnedEl = document.getElementById('total-earned');
@@ -854,29 +949,80 @@
         const historyList = document.getElementById('history-list');
         const adTitle = document.getElementById('ad-title');
         const adDescription = document.getElementById('ad-description');
-        const withdrawalSection = document.getElementById('withdrawal-section');
+        const referralLinkEl = document.getElementById('referral-link');
+        const copyReferralBtn = document.getElementById('copy-referral-btn');
+        const shareReferralBtn = document.getElementById('share-referral-btn');
+        const referralsCountEl = document.getElementById('referrals-count');
+        const referralEarningsEl = document.getElementById('referral-earnings');
+        const currentBalanceEl = document.getElementById('current-balance');
+        const withdrawalStatus = document.getElementById('withdrawal-status');
+        const withdrawBalanceEl = document.getElementById('withdraw-balance');
         const paymentMethods = document.querySelectorAll('.payment-method');
         const walletAddressInput = document.getElementById('wallet-address');
         const submitWithdrawalBtn = document.getElementById('submit-withdrawal');
-        const withdrawalModal = document.getElementById('withdrawal-modal');
-        const modalMethod = document.getElementById('modal-method');
-        const modalAddress = document.getElementById('modal-address');
-        const closeModal = document.querySelector('.close-modal');
+        const withdrawalSuccess = document.getElementById('withdrawal-success');
+        const notification = document.getElementById('notification');
 
         // Initialize game
         function initGame() {
-            // Load saved game state
-            loadGameState();
-            
             // Update UI
             updateUI();
             
-            // Add event listeners
-            startBtn.addEventListener('click', startGame);
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Generate referral link
+            referralLinkEl.value = `https://t.me/xenewatch_bot?ref=${gameState.referralCode}`;
+            
+            // Update withdrawal status
+            updateWithdrawalStatus();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const pageId = item.dataset.page;
+                    showPage(pageId);
+                    
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+            
+            // Start earning button
+            startEarningBtn.addEventListener('click', () => {
+                showPage('earn-page');
+                navItems.forEach(i => i.classList.remove('active'));
+                document.querySelector('.nav-item[data-page="earn-page"]').classList.add('active');
+            });
+            
+            // Watch ad button
             watchAdBtn.addEventListener('click', startWatchingAd);
-            resetBtn.addEventListener('click', resetGame);
-            closeModal.addEventListener('click', () => {
-                withdrawalModal.style.display = 'none';
+            
+            // Copy referral link
+            copyReferralBtn.addEventListener('click', () => {
+                referralLinkEl.select();
+                document.execCommand('copy');
+                
+                // Show notification
+                showNotification("Referral link copied to clipboard!");
+            });
+            
+            // Share referral link
+            shareReferralBtn.addEventListener('click', () => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Earn money by watching ads!',
+                        text: 'Join Ad Money Game and start earning money by watching ads. Use my referral link to get started!',
+                        url: referralLinkEl.value
+                    }).catch(console.error);
+                } else {
+                    referralLinkEl.select();
+                    document.execCommand('copy');
+                    showNotification("Referral link copied to clipboard!");
+                }
             });
             
             // Payment method selection
@@ -889,18 +1035,10 @@
                     // Update placeholder based on method
                     let placeholder = "";
                     switch(gameState.withdrawalMethod) {
-                        case "paypal":
-                            placeholder = "Your PayPal email address";
-                            break;
-                        case "usdt":
-                            placeholder = "Your USDT (TRC-20) wallet address";
-                            break;
-                        case "payeer":
-                            placeholder = "Your Payeer account ID or email";
-                            break;
-                        case "trx":
-                            placeholder = "Your TRX wallet address";
-                            break;
+                        case "paypal": placeholder = "Your PayPal email address"; break;
+                        case "usdt": placeholder = "Your USDT (TRC-20) wallet address"; break;
+                        case "payeer": placeholder = "Your Payeer account ID or email"; break;
+                        case "trx": placeholder = "Your TRX wallet address"; break;
                     }
                     walletAddressInput.placeholder = placeholder;
                 });
@@ -908,29 +1046,29 @@
             
             // Withdrawal submission
             submitWithdrawalBtn.addEventListener('click', submitWithdrawal);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show page
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active-page');
+            });
+            document.getElementById(pageId).classList.add('active-page');
             
-            // Check if withdrawal section should be visible
-            checkWithdrawalVisibility();
-        }
-
-        // Load game state from localStorage
-        function loadGameState() {
-            const savedState = localStorage.getItem('adGameState');
-            if (savedState) {
-                const parsed = JSON.parse(savedState);
-                Object.assign(gameState, parsed);
+            // Update balance on withdrawal page
+            if (pageId === 'withdraw-page') {
+                withdrawBalanceEl.textContent = gameState.balance.toFixed(2);
+                updateWithdrawalStatus();
             }
-        }
-
-        // Save game state to localStorage
-        function saveGameState() {
-            localStorage.setItem('adGameState', JSON.stringify(gameState));
-        }
-
-        // Start game function
-        function startGame() {
-            homeScreen.style.display = 'none';
-            gameScreen.style.display = 'block';
         }
 
         // Watch ad function
@@ -972,15 +1110,12 @@
             updateUI();
             addHistoryItem(0.01);
             
-            // Save state
-            saveGameState();
-            
             // Show earning animation
             balanceEl.classList.add('pulse');
             setTimeout(() => balanceEl.classList.remove('pulse'), 500);
             
-            // Check withdrawal visibility
-            checkWithdrawalVisibility();
+            // Update withdrawal status
+            updateWithdrawalStatus();
             
             // Reset for next ad
             gameState.isWatching = false;
@@ -988,20 +1123,29 @@
             progressBar.style.width = '0%';
         }
 
-        // Check if withdrawal section should be visible
-        function checkWithdrawalVisibility() {
-            if (gameState.balance >= 11) {
-                withdrawalSection.style.display = 'block';
-            } else {
-                withdrawalSection.style.display = 'none';
-            }
-        }
-
         // Update UI with current game state
         function updateUI() {
             balanceEl.textContent = gameState.balance.toFixed(2);
             adsWatchedEl.textContent = gameState.adsWatched;
             totalEarnedEl.textContent = gameState.totalEarned.toFixed(2);
+            referralsCountEl.textContent = gameState.referralsCount;
+            referralEarningsEl.textContent = gameState.referralEarnings.toFixed(2);
+            currentBalanceEl.textContent = gameState.balance.toFixed(2);
+        }
+
+        // Update withdrawal status
+        function updateWithdrawalStatus() {
+            currentBalanceEl.textContent = gameState.balance.toFixed(2);
+            withdrawBalanceEl.textContent = gameState.balance.toFixed(2);
+            
+            if (gameState.balance >= 11) {
+                withdrawalStatus.textContent = "Ready to withdraw!";
+                withdrawalStatus.style.background = "#2ecc71";
+            } else {
+                const needed = (11 - gameState.balance).toFixed(2);
+                withdrawalStatus.textContent = `$${needed} needed`;
+                withdrawalStatus.style.background = "#ff6b6b";
+            }
         }
 
         // Add history item
@@ -1031,85 +1175,50 @@
             const walletAddress = walletAddressInput.value.trim();
             
             if (!walletAddress) {
-                alert("Please enter your wallet address");
+                showNotification("Please enter your wallet address");
                 return;
             }
             
             if (gameState.balance < 11) {
-                alert("You need at least $11 to withdraw");
+                showNotification("You need at least $11 to withdraw");
                 return;
             }
-            
-            gameState.walletAddress = walletAddress;
-            
-            // Show modal with details
-            showWithdrawalModal();
             
             // Deduct withdrawal amount
             gameState.balance -= 11;
             
-            // Add to history
-            const now = new Date();
-            const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-            
-            const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
-            historyItem.innerHTML = `[<span class="time">${timeString}</span>] Withdrawal request: <span class="amount">$11.00</span>`;
-            historyList.prepend(historyItem);
+            // Show success message
+            withdrawalSuccess.style.display = 'block';
             
             // Update UI
             updateUI();
-            checkWithdrawalVisibility();
+            updateWithdrawalStatus();
             
-            // Save state
-            saveGameState();
+            // Add to withdrawal history
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString();
             
-            // Simulate sending notification to admin
-            sendWithdrawalNotification();
-        }
-
-        // Show withdrawal modal
-        function showWithdrawalModal() {
-            // Get method name
-            let methodName = "";
-            switch(gameState.withdrawalMethod) {
-                case "paypal": methodName = "PayPal"; break;
-                case "usdt": methodName = "USDT (TRC-20)"; break;
-                case "payeer": methodName = "Payeer"; break;
-                case "trx": methodName = "TRX"; break;
+            const withdrawalItem = document.createElement('div');
+            withdrawalItem.className = 'history-item';
+            withdrawalItem.innerHTML = `
+                <div><strong>${dateStr} ${timeStr}</strong></div>
+                <div>Withdrawn: $10.00 (Fee: $1.00)</div>
+                <div>Method: ${gameState.withdrawalMethod}</div>
+                <div>Status: <span style="color: #ffd700;">Pending</span></div>
+            `;
+            
+            const withdrawalHistory = document.getElementById('withdrawal-history');
+            if (withdrawalHistory.innerHTML.includes("No withdrawal history yet")) {
+                withdrawalHistory.innerHTML = '';
             }
+            withdrawalHistory.prepend(withdrawalItem);
             
-            modalMethod.textContent = methodName;
-            modalAddress.textContent = gameState.walletAddress;
+            // Send notification to admin
+            showNotification("Withdrawal request sent to admin!");
             
-            withdrawalModal.style.display = 'flex';
-        }
-
-        // Simulate sending withdrawal notification to admin
-        function sendWithdrawalNotification() {
-            console.log("ADMIN NOTIFICATION: New Withdrawal Request");
-            console.log("-----------------------------");
-            console.log(`Amount: $10.00 (Fee: $1.00)`);
-            console.log(`Method: ${gameState.withdrawalMethod}`);
-            console.log(`Wallet Address: ${gameState.walletAddress}`);
-            console.log(`User Balance: $${gameState.balance.toFixed(2)}`);
-            console.log("-----------------------------");
-            
-            // In a real application, you would send this to your backend
-            alert("Withdrawal request submitted! Admin has been notified to process your payment.");
-        }
-
-        // Reset game
-        function resetGame() {
-            if (confirm("Are you sure you want to reset your progress? All earnings will be lost.")) {
-                gameState.balance = 0;
-                gameState.adsWatched = 0;
-                gameState.totalEarned = 0;
-                historyList.innerHTML = '<div class="history-item">Start watching ads to see your earnings here</div>';
-                updateUI();
-                checkWithdrawalVisibility();
-                saveGameState();
-            }
+            // Reset form
+            walletAddressInput.value = "";
         }
 
         // Initialize the game when the page loads
