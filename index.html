@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Money Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 15px 0;
+            color: #4dabf7;
+        }
+        
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        #home-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+        
+        .balance-container {
+            background: linear-gradient(to right, #192a56, #273c75);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .balance-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #ffd700, #ff9800);
+        }
+        
+        #balance {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .currency {
+            font-size: 1.2rem;
+            color: #4dabf7;
+            margin-left: 5px;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 300px;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:disabled {
+            background: linear-gradient(to right, #555, #777);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.6s;
+        }
+        
+        .btn:hover::after {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+        
+        #start-btn {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            font-size: 1.8rem;
+            padding: 20px 40px;
+            margin-top: 30px;
+        }
+        
+        .ad-container {
+            background: rgba(30, 30, 40, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ad-container::before {
+            content: 'AD';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4757;
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .ad-content {
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .ad-title {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .ad-description {
+            font-size: 1rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .ad-image {
+            width: 80%;
+            max-width: 300px;
+            height: 150px;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            border-radius: 10px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ad-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #00c9ff, #92fe9d);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 1s linear;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin: 20px 0;
+            background: rgba(40, 40, 60, 0.7);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .history {
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(30, 30, 40, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .history-item {
+            padding: 8px;
+            border-bottom: 1px solid #444;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-item .time {
+            color: #4dabf7;
+            font-size: 0.8rem;
+        }
+        
+        .history-item .amount {
+            color: #7bed9f;
+            font-weight: bold;
+        }
+        
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-100%, -100%); }
+            100% { transform: rotate(30deg) translate(100%, 100%); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            #balance {
+                font-size: 2.2rem;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                font-size: 1.1rem;
+            }
+            
+            #start-btn {
+                font-size: 1.5rem;
+                padding: 18px 30px;
+            }
+            
+            .ad-image {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ad Money Game</h1>
+        
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen">
+            <h2>Watch Ads & Earn Money!</h2>
+            <p>Earn $0.01 for each ad you watch</p>
+            <button id="start-btn" class="btn">START GAME</button>
+            <div style="margin-top: 30px; opacity: 0.8;">
+                <i class="fas fa-mobile-alt" style="font-size: 3rem;"></i>
+                <p style="margin-top: 15px;">Mobile friendly design</p>
+            </div>
+        </div>
+        
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="balance-container">
+                <h2>Your Balance</h2>
+                <div>
+                    <span id="balance">0.00</span>
+                    <span class="currency">USD</span>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="ads-watched">0</div>
+                    <div class="stat-label">Ads Watched</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-earned">0.00</div>
+                    <div class="stat-label">Total Earned</div>
+                </div>
+            </div>
+            
+            <div class="ad-container">
+                <div class="ad-content">
+                    <div class="ad-title" id="ad-title">Premium Mobile Game</div>
+                    <div class="ad-image">ADVERTISEMENT</div>
+                    <div class="ad-description" id="ad-description">Download now and get 500 free coins!</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                
+                <button id="watch-ad-btn" class="btn">WATCH AD TO EARN $0.01</button>
+            </div>
+            
+            <div class="history">
+                <h3>Earning History</h3>
+                <div id="history-list">
+                    <div class="history-item">Start watching ads to see your earnings here</div>
+                </div>
+            </div>
+            
+            <button id="reset-btn" class="btn" style="background: linear-gradient(to right, #ff6b6b, #ff9e7d); margin-top: 20px;">
+                <i class="fas fa-redo"></i> RESET GAME
+            </button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Ad Money Game &copy; 2023 | Each ad earns $0.01</p>
+    </footer>
+
+    <script>
+        // Game state
+        const gameState = {
+            balance: 0,
+            adsWatched: 0,
+            totalEarned: 0,
+            isWatching: false,
+            adTitles: [
+                "Epic Fantasy RPG Game",
+                "Free Delivery Service",
+                "Fitness App Premium",
+                "Online Learning Platform",
+                "Music Streaming Service",
+                "Food Delivery Special",
+                "Fashion Sale - 70% Off",
+                "Investment App - Get $10 Bonus"
+            ],
+            adDescriptions: [
+                "Download now and get 500 free gems!",
+                "First order free with this offer!",
+                "Get 3 months free subscription!",
+                "Learn new skills with 50% discount",
+                "Unlimited music for only $4.99/month",
+                "Free dessert with every order today!",
+                "Summer collection at amazing prices",
+                "Start investing with just $5 today"
+            ]
+        };
+
+        // DOM elements
+        const homeScreen = document.getElementById('home-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const startBtn = document.getElementById('start-btn');
+        const watchAdBtn = document.getElementById('watch-ad-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const balanceEl = document.getElementById('balance');
+        const adsWatchedEl = document.getElementById('ads-watched');
+        const totalEarnedEl = document.getElementById('total-earned');
+        const progressBar = document.getElementById('progress-bar');
+        const historyList = document.getElementById('history-list');
+        const adTitle = document.getElementById('ad-title');
+        const adDescription = document.getElementById('ad-description');
+
+        // Initialize game
+        function initGame() {
+            updateUI();
+            startBtn.addEventListener('click', startGame);
+            watchAdBtn.addEventListener('click', startWatchingAd);
+            resetBtn.addEventListener('click', resetGame);
+        }
+
+        // Start game function
+        function startGame() {
+            homeScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+        }
+
+        // Watch ad function
+        function startWatchingAd() {
+            if (gameState.isWatching) return;
+            
+            gameState.isWatching = true;
+            watchAdBtn.disabled = true;
+            progressBar.style.width = '0%';
+            
+            // Select random ad
+            const titleIndex = Math.floor(Math.random() * gameState.adTitles.length);
+            adTitle.textContent = gameState.adTitles[titleIndex];
+            adDescription.textContent = gameState.adDescriptions[titleIndex];
+            
+            // Simulate ad loading
+            setTimeout(() => {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 2;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        finishWatchingAd();
+                    }
+                }, 50);
+            }, 500);
+        }
+
+        // Finish watching ad
+        function finishWatchingAd() {
+            // Earn money
+            gameState.balance += 0.01;
+            gameState.adsWatched++;
+            gameState.totalEarned += 0.01;
+            
+            // Update UI
+            updateUI();
+            addHistoryItem();
+            
+            // Show earning animation
+            balanceEl.classList.add('pulse');
+            setTimeout(() => balanceEl.classList.remove('pulse'), 500);
+            
+            // Reset for next ad
+            gameState.isWatching = false;
+            watchAdBtn.disabled = false;
+            progressBar.style.width = '0%';
+        }
+
+        // Update UI with current game state
+        function updateUI() {
+            balanceEl.textContent = gameState.balance.toFixed(2);
+            adsWatchedEl.textContent = gameState.adsWatched;
+            totalEarnedEl.textContent = gameState.totalEarned.toFixed(2);
+        }
+
+        // Add history item
+        function addHistoryItem() {
+            const now = new Date();
+            const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `[<span class="time">${timeString}</span>] You earned <span class="amount">$0.01</span> watching an ad`;
+            
+            // If it's the first item, replace the placeholder
+            if (historyList.children.length === 1 && historyList.children[0].textContent.includes("Start watching")) {
+                historyList.innerHTML = '';
+            }
+            
+            historyList.prepend(historyItem);
+            
+            // Limit to 10 history items
+            if (historyList.children.length > 10) {
+                historyList.removeChild(historyList.lastChild);
+            }
+        }
+
+        // Reset game
+        function resetGame() {
+            if (confirm("Are you sure you want to reset your progress? All earnings will be lost.")) {
+                gameState.balance = 0;
+                gameState.adsWatched = 0;
+                gameState.totalEarned = 0;
+                historyList.innerHTML = '<div class="history-item">Start watching ads to see your earnings here</div>';
+                updateUI();
+            }
+        }
+
+        // Initialize the game when the page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>
