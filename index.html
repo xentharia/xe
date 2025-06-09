@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ad Money Game</title>
+    <script src='//libtl.com/sdk.js' data-zone='9431372' data-sdk='show_9431372'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -312,6 +313,46 @@
             font-weight: bold;
         }
         
+        .ad-info {
+            background: rgba(40, 40, 60, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .ad-info i {
+            color: #ffd700;
+            margin-right: 5px;
+        }
+        
+        .ad-format-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .format-btn {
+            background: rgba(60, 60, 80, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .format-btn:hover {
+            background: rgba(80, 80, 100, 0.9);
+        }
+        
+        .format-btn.active {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            box-shadow: 0 0 10px rgba(0, 176, 155, 0.5);
+        }
+        
         footer {
             margin-top: 20px;
             text-align: center;
@@ -370,6 +411,10 @@
             .ad-image {
                 height: 120px;
             }
+            
+            .ad-format-selector {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -385,6 +430,9 @@
             <div style="margin-top: 30px; opacity: 0.8;">
                 <i class="fas fa-mobile-alt" style="font-size: 3rem;"></i>
                 <p style="margin-top: 15px;">Mobile friendly design</p>
+            </div>
+            <div class="ad-info">
+                <p><i class="fas fa-info-circle"></i> Ads powered by AdNetwork</p>
             </div>
         </div>
         
@@ -420,6 +468,12 @@
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
                 
+                <div class="ad-format-selector">
+                    <button class="format-btn active" data-format="rewarded">Rewarded Ad</button>
+                    <button class="format-btn" data-format="popup">Rewarded Popup</button>
+                    <button class="format-btn" data-format="interstitial">In-App Interstitial</button>
+                </div>
+                
                 <button id="watch-ad-btn" class="btn">WATCH AD TO EARN $0.01</button>
             </div>
             
@@ -428,6 +482,11 @@
                 <div id="history-list">
                     <div class="history-item">Start watching ads to see your earnings here</div>
                 </div>
+            </div>
+            
+            <div class="ad-info">
+                <p><i class="fas fa-sync-alt"></i> Each ad earns $0.01</p>
+                <p><i class="fas fa-ad"></i> Real ads powered by AdNetwork</p>
             </div>
             
             <button id="reset-btn" class="btn" style="background: linear-gradient(to right, #ff6b6b, #ff9e7d); margin-top: 20px;">
@@ -447,6 +506,7 @@
             adsWatched: 0,
             totalEarned: 0,
             isWatching: false,
+            adFormat: "rewarded",
             adTitles: [
                 "Epic Fantasy RPG Game",
                 "Free Delivery Service",
@@ -482,6 +542,7 @@
         const historyList = document.getElementById('history-list');
         const adTitle = document.getElementById('ad-title');
         const adDescription = document.getElementById('ad-description');
+        const formatButtons = document.querySelectorAll('.format-btn');
 
         // Initialize game
         function initGame() {
@@ -489,6 +550,18 @@
             startBtn.addEventListener('click', startGame);
             watchAdBtn.addEventListener('click', startWatchingAd);
             resetBtn.addEventListener('click', resetGame);
+            
+            // Add event listeners for ad format buttons
+            formatButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    formatButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    gameState.adFormat = button.dataset.format;
+                    updateAdFormatInfo();
+                });
+            });
+            
+            updateAdFormatInfo();
         }
 
         // Start game function
@@ -544,6 +617,53 @@
             gameState.isWatching = false;
             watchAdBtn.disabled = false;
             progressBar.style.width = '0%';
+            
+            // Show real ad after the simulated one
+            showRealAd();
+        }
+
+        // Show real ad based on selected format
+        function showRealAd() {
+            try {
+                // Check if the ad SDK is available
+                if (typeof show_9431372 !== 'undefined') {
+                    switch(gameState.adFormat) {
+                        case "rewarded":
+                            // Rewarded interstitial
+                            show_9431372().then(() => {
+                                // User watched ad - reward already given in simulation
+                            });
+                            break;
+                            
+                        case "popup":
+                            // Rewarded Popup
+                            show_9431372('pop').then(() => {
+                                // User watched ad
+                            }).catch(e => {
+                                console.log("Ad closed or error:", e);
+                            });
+                            break;
+                            
+                        case "interstitial":
+                            // In-App Interstitial
+                            show_9431372({
+                                type: 'inApp',
+                                inAppSettings: {
+                                    frequency: 2,
+                                    capping: 0.1,
+                                    interval: 30,
+                                    timeout: 5,
+                                    everyPage: false
+                                }
+                            });
+                            break;
+                    }
+                } else {
+                    console.log("Ad SDK not available - showing simulated ad");
+                }
+            } catch (e) {
+                console.error("Error showing ad:", e);
+            }
         }
 
         // Update UI with current game state
@@ -551,6 +671,25 @@
             balanceEl.textContent = gameState.balance.toFixed(2);
             adsWatchedEl.textContent = gameState.adsWatched;
             totalEarnedEl.textContent = gameState.totalEarned.toFixed(2);
+        }
+
+        // Update ad format information
+        function updateAdFormatInfo() {
+            let formatInfo = "";
+            switch(gameState.adFormat) {
+                case "rewarded":
+                    formatInfo = "Rewarded Interstitial: Full-screen ad with reward after completion";
+                    break;
+                case "popup":
+                    formatInfo = "Rewarded Popup: Popup ad with reward after completion";
+                    break;
+                case "interstitial":
+                    formatInfo = "In-App Interstitial: Full-screen ads shown automatically";
+                    break;
+            }
+            
+            document.querySelector('.ad-info p:first-child').innerHTML = 
+                `<i class="fas fa-info-circle"></i> ${formatInfo}`;
         }
 
         // Add history item
