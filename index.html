@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Money Game</title>
+    <title>Ad Money Game - Watch Ads & Earn Money</title>
     <script src='//libtl.com/sdk.js' data-zone='9431372' data-sdk='show_9431372'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -419,6 +419,27 @@
             color: #aaa;
         }
         
+        .telegram-icon {
+            background: linear-gradient(to right, #0088cc, #34b7f1);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto;
+            font-size: 2rem;
+        }
+        
+        .referral-bonus {
+            background: linear-gradient(45deg, #ff9a00, #ff5e00);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+            display: inline-block;
+        }
+        
         footer {
             margin-top: 20px;
             text-align: center;
@@ -460,13 +481,10 @@
             cursor: pointer;
         }
         
-        .referral-bonus {
-            background: linear-gradient(45deg, #ff9a00, #ff5e00);
-            padding: 5px 10px;
-            border-radius: 20px;
+        .bot-username {
             font-weight: bold;
+            color: #34b7f1;
             margin: 10px 0;
-            display: inline-block;
         }
         
         @keyframes fadeIn {
@@ -590,7 +608,13 @@
             
             <div class="referral-section">
                 <h3><i class="fas fa-user-friends"></i> Referral Program</h3>
-                <p>Invite friends and earn 20% of their earnings!</p>
+                <p>Invite friends and earn <span class="referral-bonus">20%</span> of their earnings!</p>
+                
+                <div class="telegram-icon">
+                    <i class="fab fa-telegram"></i>
+                </div>
+                
+                <p>Share your unique referral link with friends:</p>
                 
                 <div class="referral-link-container">
                     <input type="text" id="referral-link" readonly>
@@ -599,8 +623,8 @@
                     </button>
                 </div>
                 
-                <button id="share-referral-btn" class="btn" style="background: linear-gradient(to right, #9b59b6, #3498db);">
-                    <i class="fas fa-share-alt"></i> SHARE REFERRAL LINK
+                <button id="share-referral-btn" class="btn" style="background: linear-gradient(to right, #0088cc, #34b7f1);">
+                    <i class="fab fa-telegram"></i> SHARE VIA TELEGRAM
                 </button>
                 
                 <div class="referral-stats">
@@ -612,6 +636,11 @@
                         <div class="referral-value" id="referral-earnings">0.00</div>
                         <div class="referral-label">Referral Earnings</div>
                     </div>
+                </div>
+                
+                <div class="ad-info" style="margin-top: 15px;">
+                    <p><i class="fas fa-lightbulb"></i> Earn 20% of your friends' earnings</p>
+                    <p><i class="fas fa-bolt"></i> Get $0.05 when your friend signs up</p>
                 </div>
             </div>
             
@@ -642,11 +671,6 @@
                 </div>
             </div>
             
-            <div class="ad-info">
-                <p><i class="fas fa-sync-alt"></i> Each ad earns $0.01</p>
-                <p><i class="fas fa-ad"></i> Real ads powered by AdNetwork</p>
-            </div>
-            
             <button id="reset-btn" class="btn" style="background: linear-gradient(to right, #ff6b6b, #ff9e7d); margin-top: 20px;">
                 <i class="fas fa-redo"></i> RESET GAME
             </button>
@@ -660,16 +684,19 @@
             <h2><i class="fas fa-gift"></i> Referral Bonus!</h2>
             <div class="referral-bonus">+$0.05</div>
             <p>Your friend signed up using your referral link!</p>
-            <p>You'll earn 20% of all their earnings.</p>
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='96' height='96'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23FFD700'/%3E%3Cpath d='M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8Z' fill='%23FF9800'/%3E%3C/svg%3E" alt="Bonus" class="float" style="margin: 15px 0;">
-            <button class="btn" style="background: linear-gradient(to right, #00b09b, #96c93d); margin-top: 10px;">
-                CONTINUE
+            <p>You'll earn <span class="referral-bonus">20%</span> of all their earnings.</p>
+            <div class="telegram-icon" style="margin: 20px auto;">
+                <i class="fab fa-telegram"></i>
+            </div>
+            <p>Share with more friends to earn more!</p>
+            <button id="modal-share-btn" class="btn" style="background: linear-gradient(to right, #0088cc, #34b7f1); margin-top: 15px;">
+                <i class="fab fa-telegram"></i> SHARE REFERRAL LINK
             </button>
         </div>
     </div>
     
     <footer>
-        <p>Ad Money Game &copy; 2023 | Each ad earns $0.01</p>
+        <p>Ad Money Game &copy; 2023 | Each ad earns $0.01 | Referral Earnings: 20%</p>
     </footer>
 
     <script>
@@ -683,6 +710,7 @@
             referralCode: "",
             referralsCount: 0,
             referralEarnings: 0,
+            botUsername: "xenewatch_bot",
             adTitles: [
                 "Epic Fantasy RPG Game",
                 "Free Delivery Service",
@@ -726,6 +754,7 @@
         const referralEarningsEl = document.getElementById('referral-earnings');
         const referralModal = document.getElementById('referral-modal');
         const closeModal = document.querySelector('.close-modal');
+        const modalShareBtn = document.getElementById('modal-share-btn');
 
         // Initialize game
         function initGame() {
@@ -753,6 +782,7 @@
             closeModal.addEventListener('click', () => {
                 referralModal.style.display = 'none';
             });
+            modalShareBtn.addEventListener('click', shareReferralLink);
             
             // Add event listeners for ad format buttons
             formatButtons.forEach(button => {
@@ -779,7 +809,7 @@
 
         // Update referral link display
         function updateReferralLink() {
-            referralLinkEl.value = window.location.href.split('?')[0] + '?ref=' + gameState.referralCode;
+            referralLinkEl.value = `https://t.me/${gameState.botUsername}?start=${gameState.referralCode}`;
         }
 
         // Copy referral link to clipboard
@@ -795,17 +825,12 @@
             }, 2000);
         }
 
-        // Share referral link
+        // Share referral link via Telegram
         function shareReferralLink() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Earn money by watching ads!',
-                    text: 'Join Ad Money Game and start earning money by watching ads. Use my referral link to get started!',
-                    url: referralLinkEl.value
-                }).catch(console.error);
-            } else {
-                copyReferralLink();
-            }
+            const message = `Join Ad Money Game and start earning money by watching ads! Use my referral link to get started and I'll earn 20% of your earnings: ${referralLinkEl.value}`;
+            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLinkEl.value)}&text=${encodeURIComponent(message)}`;
+            
+            window.open(telegramUrl, '_blank');
         }
 
         // Check if user came from a referral link
@@ -997,6 +1022,8 @@
                 gameState.balance = 0;
                 gameState.adsWatched = 0;
                 gameState.totalEarned = 0;
+                gameState.referralsCount = 0;
+                gameState.referralEarnings = 0;
                 historyList.innerHTML = '<div class="history-item">Start watching ads to see your earnings here</div>';
                 updateUI();
                 saveGameState();
